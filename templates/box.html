@@ -1,0 +1,47 @@
+{% extends framework.html %}
+
+{% block body %}
+
+<div>
+    <img src="{{OWNER.avatar_url}}" width="128px" height="128px" style="border-radius:50%;" />
+    <h4>欢迎向我匿名提问</h4>
+</div>
+
+<div class="mdui-tab" mdui-tab>
+  <a href="#answered-tab" class="mdui-ripple mdui-tab-active">回答过的问题</a>
+  <a href="#unanswered-tab" class="mdui-ripple">未回答的问题</a>
+</div>
+
+<div id="answered-tab" class="mdui-p-a-2">
+    {% for QUESTION in QUESTIONS %}
+    <div class="mdui-card">
+        <div class="mdui-card-media">
+            <img src=""/>
+            <div class="mdui-card-media-covered mdui-card-media-covered-top">
+            <div class="mdui-card-primary">
+                <div class="mdui-card-primary-title">提问：</div>
+                <div class="mdui-card-primary-subtitle">{{QUESTION.question}}</div>
+            </div>
+            </div>
+        </div>
+        <div class="mdui-card-actions">
+            <div class="mdui-panel" mdui-panel>
+                <div class="mdui-panel-item">
+                    <div class="mdui-panel-item-header">查看回答</div>
+                    <div class="mdui-panel-item-body">
+                        <p>{{QUESTION.answer}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+<div id="unanswered-tab" class="mdui-p-a-2">
+
+</div>
+
+
+{% endblock %}

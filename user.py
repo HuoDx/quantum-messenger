@@ -25,4 +25,7 @@ def get_user_info(token) -> UserInfo:
     if user is not None:
         return True, user
     return False, 'user does not exist.'
-    
+
+def get_user_public_info(uid) -> UserInfo:
+    global users
+    return users.get(uid)
