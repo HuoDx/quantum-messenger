@@ -30,7 +30,7 @@ class Question:
         return (self.answerer is not None and self.answer_time is not None and self.answer is not None and self.answer != '')
     
     # Don't ever write anyting like this - it's a total mess
-    # But I'm hurry to finish and meet my girlfriend so it's fine ;)
+    # But I'm hurry to finish and meet my girlfriend online so it's fine ;)
     convert_timestamp = lambda x: datetime.datetime.strftime(datetime.datetime.fromtimestamp(x), '%b %d, %Y %H:%M:%S')
     
     def __str__(self):
