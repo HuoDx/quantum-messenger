@@ -26,7 +26,7 @@ def callback():
         print('User logged in: ', result[1])
     wxpush.push_notification( 
         Notification(
-            '''<h2>你好，欢迎你加入 Quick Magic 匿名问答</h2>
+            '''<h2>你好，欢迎你加入 Quantum Messenger 匿名问答</h2>
                 <h4>这是一个简洁轻松的提问箱</h4>
                 <ul>
                 <li><a href="%s">我的提问箱</a></li>
@@ -34,7 +34,7 @@ def callback():
                 </ul>
             '''%(config.base+'/box/%s'%user_uid,''),
             Notification.HTML,
-            '欢迎加入 Quick Magic 匿名问答'
+            '欢迎加入 Quantum Messenger 匿名问答'
             ),
         [user_uid]
     ) 
