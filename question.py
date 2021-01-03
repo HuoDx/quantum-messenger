@@ -55,9 +55,14 @@ class Question:
             ans+=('    · Answer Time: %s\n\n'%Question.convert_timestamp(self.answer_time))
         
         return ans
-questions = {} # question_uid -> Question
-asker_questions = {} # asker_uid -> list<Question>
-answerer_questions = {} # answerer_uid -> list<Question>
+    
+from utils.data_storage import load, save
+    
+questions = load('questions', {}) # question_uid -> Question
+asker_questions = load('asker_questions', {}) # asker_uid -> list<Question>
+answerer_questions = load('answerer_questions', {}) # answerer_uid -> list<Question>
+temporary_questions = load('temporary_questions', {}) # token -> list<question uid>
+
 
 def add_question(question_object: Question):
     global questions, asker_questions, answerer_questions
@@ -79,7 +84,11 @@ def add_question(question_object: Question):
         answerer_questions.get(question_object.answerer).append(question_object.uid)
     else:
         answerer_questions.update({question_object.answerer: [question_object.uid]})
-        
+    
+    
+    save(questions, 'questions')
+    save(asker_questions, 'asker_questions')
+    save(asker_questions, 'answerer_questions')
     return True
 
 def get_question(question_uid) -> Question:
@@ -113,6 +122,8 @@ def answer_question(question_uid, answer, answerer_uid):
         return False, err_msg
     question.answer = answer
     question.answer_time = time.time()
+    
+    save(questions, 'questions')
     return True,
 
 # test
@@ -128,7 +139,7 @@ def answer_question(question_uid, answer, answerer_uid):
 # answer_question(q.uid, '你好。', ansr)
 # print(q)
 
-temporary_questions = {} # token -> list<question uid>
+
 
 def register_temporary(token, question_uid):
     global temporary_questions
@@ -136,6 +147,7 @@ def register_temporary(token, question_uid):
         temporary_questions.get(token).append(question_uid)
     else:
         temporary_questions.update({token: [question_uid]})
+    save(temporary_questions, 'temporary_questions')
     return True
 
 def remove_temporary(token, user_uid):
@@ -144,4 +156,5 @@ def remove_temporary(token, user_uid):
     for question_uid in temporary_questions.get(token,[]):
         questions.get(question_uid).asker = user_uid
         count += 1
+    save(temporary_questions, 'temporary_questions')
     return True, '%s questions updated.'%count

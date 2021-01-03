@@ -28,9 +28,9 @@ def callback():
         Notification(
             '''<h2>你好，欢迎你加入 Quantum Messenger 匿名问答</h2>
                 <h4>这是一个简洁轻松的提问箱</h4>
-                <ul>
-                <li><a href="%s">我的提问箱</a></li>
-                <li><del><a href="%s">我的问题（没做并且我懒得做了orz）</a></del></li>
+                <p><a href="%s">我的提问箱</a></p>
+                
+                <p><del><a href="%s">我的问题（没做并且我懒得做了orz）</a></del></p>
                 </ul>
             '''%(config.base+'/box/%s'%user_uid,''),
             Notification.HTML,

@@ -63,7 +63,7 @@
     <form action="/box/{{OWNER.uid}}" method="POST" style="width:100%;">
         <div class="mdui-textfield mdui-textfield-floating-label">
             <label class="mdui-textfield-label">匿名问一个问题</label>
-            <textarea name="question" class="mdui-textfield-input" required></textarea>
+            <textarea id="question" name="question" class="mdui-textfield-input" required></textarea>
         </div>
         <button class="mdui-btn mdui-ripple mdui-btn-raised mdui-float-right" id="submit-button">提问</button>
         {% if not IS_OWNER %}
@@ -71,13 +71,19 @@
         {% endif %}
     </form>
     <script>
-    let submitButton = document.getElementById('submit-button')
-    submitButton.disabled = true
-    let textarea = document.querySelector('textarea')
-    window.addEventListener('scroll', (e) => document.body.style.backgroundColor=`rgba(0,45,77,${(Math.atan(window.scrollY) / Math.PI) * 0.1})`)
-    textarea.addEventListener('keyup', (e) => {
+    let submitButton = document.getElementById('submit-button');
+    let textarea = document.getElementById('question');
+    submitButton.disabled = true;
+    //window.addEventListener('scroll', (e) => document.body.style.backgroundColor=`rgba(0,45,77,${(Math.atan(window.scrollY) / Math.PI) * 0.1})`)
+    textarea.addEventListener('keyup', function(e) {
         submitButton.disabled = (textarea.value.replaceAll(/[\s]/g, '')==='')
     })
+    textarea.addEventListener('change', function(e) {
+        submitButton.disabled = (textarea.value.replaceAll(/[\s]/g, '')==='')
+    })
+    function upd() {
+        submitButton.disabled = (textarea.value.replaceAll(/[\s]/g, '')==='')
+    }
     </script>
 </div>
 
