@@ -2,11 +2,11 @@
 
 {% block css %}
 .head-container {
-        display: flex;
+    display: flex;
     flex-direction: column;
     margin: 24px;
     justify-content: center;
-    text-align: center;
+    text-align: start;
 }
 .avatar {
     border-radius:50%;
@@ -38,11 +38,15 @@
     flex-direction: column;
 }
 
+.mdui-card {
+    margin-top: 8px;
+}
 
 {% endblock %}
 
 {% block body %}
 
+{% if IS_OWNER %}
 <div class="flex-container">
     <input type="checkbox"  id="more"/>
     <div class="share-mask">
@@ -50,18 +54,31 @@
     </div>
     <label for="more" class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" id="more-button" style="align-self: flex-end;">获取更多提问</label>
 </div>
-
+{% endif %}
 <div class="head-container">
-    <img src="{{OWNER.avatar_url}}" width="86px" height="86px" class="avatar" />
-    <h4>欢迎向我匿名提问</h4>
-
-    <form action="/box/{{OWNER.uid}}" method="POST">
+    <div style="display: flex; align-items: center;">
+    <img src="{{OWNER.avatar_url}}" width="86px" height="86px" class="avatar mdui-shadow-4" />
+    <h2 style="margin-left: 8vw;">欢迎向我匿名提问</h2>
+    </div>
+    <form action="/box/{{OWNER.uid}}" method="POST" style="width:100%;">
         <div class="mdui-textfield mdui-textfield-floating-label">
             <label class="mdui-textfield-label">匿名问一个问题</label>
-            <textarea name="question" class="mdui-textfield-input"></textarea>
+            <textarea name="question" class="mdui-textfield-input" required></textarea>
         </div>
-        <button class="mdui-btn mdui-btn-raised">提问</button>
+        <button class="mdui-btn mdui-ripple mdui-btn-raised mdui-float-right" id="submit-button">提问</button>
+        {% if not IS_OWNER %}
+        <a class="mdui-btn mdui-btn-outline mdui-float-right" href="/login">我也想玩</a>
+        {% endif %}
     </form>
+    <script>
+    let submitButton = document.getElementById('submit-button')
+    submitButton.disabled = true
+    let textarea = document.querySelector('textarea')
+    window.addEventListener('scroll', (e) => document.body.style.backgroundColor=`rgba(0,45,77,${(Math.atan(window.scrollY) / Math.PI) * 0.1})`)
+    textarea.addEventListener('keyup', (e) => {
+        submitButton.disabled = (textarea.value.replaceAll(/[\s]/g, '')==='')
+    })
+    </script>
 </div>
 
 <div class="mdui-tab" mdui-tab>

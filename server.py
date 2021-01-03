@@ -30,7 +30,7 @@ def callback():
                 <h4>这是一个简洁轻松的提问箱</h4>
                 <ul>
                 <li><a href="%s">我的提问箱</a></li>
-                <li><a href="%s">我的问题</a></li>
+                <li><del><a href="%s">我的问题（没做并且我懒得做了orz）</a></del></li>
                 </ul>
             '''%(config.base+'/box/%s'%user_uid,''),
             Notification.HTML,
@@ -55,7 +55,7 @@ def box(user_uid):
         answered_questions = []
         unanswered_questions = []
         
-        for question in get_questions_by_answerer(box_owner.uid):
+        for question in reversed(get_questions_by_answerer(box_owner.uid)):
             if question is None:
                 continue
             if question.has_answered():
@@ -94,7 +94,8 @@ def box(user_uid):
         
         response = make_response(render_template('ask-done.html',
                                                 QR_CODE_URL = qr_code_url,
-                                                IS_TEMP = not logged_in
+                                                IS_TEMP = not logged_in,
+                                                BACK_URL = '/box/%s'%user_uid
         ))
         if not logged_in:
             response.set_cookie('token', token)
@@ -141,7 +142,7 @@ def login():
         # logged in
         u = user.get_user_info(request.cookies.get('token'))[1]
         print(u)
-        return '<h1>%s, %s</h1>'%(u.nickname, u.avatar_url) # TODO: redirect to index or something
+        return redirect('/box/%s'%u.uid)
     
     token = str(uuid4())
     result = wxpush.get_qr_codes(token)

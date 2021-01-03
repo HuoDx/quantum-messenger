@@ -1,22 +1,44 @@
 {% extends "framework.html" %}
 
+
+{% block css %}
+    .qr-code {
+        align-self: center;
+        border-radius: 4px;
+        margin: 16px;
+    }
+{% endblock%}
 {% block body %}
 
-<h3>您的问题已发出！</h3>
-{% if IS_TEMP %}
-    
-    <div>
-        <div>长按下方二维码，关注公众号即可在提问被回答后接收通知</div>
-        <img src="{{QR_CODE_URL}}" width="128px" height="128px" />
-        <div>PS：当然，您也可以选择关掉这个页面，时不时来提问箱看看 ;D </div>
-    </div>
+<div class="mdui-card">
+  <!-- 卡片的标题和副标题 -->
+  <div class="mdui-card-primary">
+    <div class="mdui-card-primary-title">您的问题已发出</div>
+    <div class="mdui-card-primary-subtitle">我们会在问题被回答的时候通知你</div>
+  </div>
 
-{% else %}
-    <div>
-        我们会在问题被回答的时候通知你
+  <!-- 卡片的内容 -->
+  <div class="mdui-card-content">
+    {% if IS_TEMP %}
+        
+        <div style="display: flex; flex-direction: column">
+            <div>长按下方二维码，关注公众号即可在提问被回答后接收通知</div>
+            <img src="{{QR_CODE_URL}}" width="128px" height="128px" class="qr-code mdui-shadow-2" />
+            <div>PS：当然，您也可以选择关掉这个页面，时不时来提问箱看看 ;D </div>
+        </div>
+
+    {% else %}
+        <p>我们会在问题被回答的时候通知你</p>
         <div>PS：当然，您也可以时不时来提问箱看看 ;D </div>
-    </div>
-{% endif %}
 
+    {% endif %}
+  </div>
+
+  <!-- 卡片的按钮 -->
+  <div class="mdui-card-actions">
+    <a class="mdui-btn mdui-ripple mdui-float-right" href="{{BACK_URL}}">回到提问箱</a>
+  </div>
+
+</div>
 
 {% endblock %}

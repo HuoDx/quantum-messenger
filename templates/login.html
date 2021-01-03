@@ -1,5 +1,33 @@
 {% extends "framework.html" %}
 
+
+{% block css %}
+    .qr-code {
+        align-self: center;
+        border-radius: 4px;
+        margin: 16px;
+    }
+{% endblock%}
 {% block body %}
-<img src="{{QR_CODE_URL}}" width="128px" height="128px" />
+
+<div class="mdui-card">
+  <!-- 卡片的标题和副标题 -->
+  <div class="mdui-card-primary">
+    <div class="mdui-card-primary-title">请扫码以继续</div>
+    <div class="mdui-card-primary-subtitle">这将不会为您带来额外的打扰</div>
+  </div>
+
+  <!-- 卡片的内容 -->
+  <div class="mdui-card-content"> 
+    <div style="display: flex; flex-direction: column">
+        <div>这不是广告：Quantum Messenger 使用公众号与您交互</div>
+        <div>长按下方二维码，扫码关注公众号</div>
+        <img src="{{QR_CODE_URL}}" width="128px" height="128px" class="qr-code mdui-shadow-2" />
+        <a href="{{QR_CODE_URL}}">调试二维码</a>
+        <div>无需注册，无需下载。希望 Quantum Messenger 的方便简洁为您带来更好的体验！</div>
+    </div>
+
+  </div>
+</div>
+
 {% endblock %}
