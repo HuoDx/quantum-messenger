@@ -35,11 +35,12 @@
 }
 .flex-container {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
 }
 
 .mdui-card {
-    margin-top: 8px;
+    margin: 8px;
+    max-width: 320px;
 }
 
 {% endblock %}
@@ -96,7 +97,7 @@
   {% endif %}
 </div>
 
-<div id="answered-tab" class="mdui-p-a-2">
+<div id="answered-tab" class="mdui-p-a-2 flex-container">
     {% for QUESTION in ANSWERED_QUESTIONS %}
     <div class="mdui-card">
         <div class="mdui-card-media">
@@ -124,7 +125,7 @@
 </div>
 
 {% if IS_OWNER %}
-<div id="unanswered-tab" class="mdui-p-a-2">
+<div id="unanswered-tab" class="mdui-p-a-2 flex-container">
     {% for QUESTION in UNANSWERED_QUESTIONS %}
     <div class="mdui-card">
         <div class="mdui-card-media">
