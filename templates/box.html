@@ -36,6 +36,7 @@
 .flex-container {
     display: flex;
     flex-wrap: wrap;
+    
 }
 
 .mdui-card {
@@ -43,12 +44,17 @@
     max-width: 320px;
 }
 
+@media(max-width: 680px) {
+    .flex-container {
+        justify-content: center;
+    }
+}
 {% endblock %}
 
 {% block body %}
 
 {% if IS_OWNER %}
-<div class="flex-container">
+<div style="display: flex; flex-direction: column-reverse;">
     <input type="checkbox"  id="more"/>
     <div class="share-mask">
         <div>点击右上角分享到朋友圈</div>
