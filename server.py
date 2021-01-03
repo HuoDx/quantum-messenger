@@ -64,8 +64,8 @@ def box(user_uid):
             else:
                 unanswered_questions.append(question)
                 
-        print('Answered Questions:', [str(a) for a in answered_questions])
-        print('Unanswered Questions:', [str(a) for a in unanswered_questions])
+        # print('Answered Questions:', [str(a) for a in answered_questions])
+        # print('Unanswered Questions:', [str(a) for a in unanswered_questions])
         
         return render_template(
             'box.html',
@@ -160,10 +160,16 @@ def login():
         return response
     
 if __name__ == '__main__':
-
-    app.run(
-        host = config.host,
-        port = config.port,
-        debug = config.debug
-    )
+    if config.debug:
+        app.run(
+            host = config.host,
+            port = config.port,
+            debug = config.debug
+        )
+    else:
+        import waitress
+        waitress.serve(app, 
+            host = config.host,
+            port = config.port
+        )
 
