@@ -1,6 +1,7 @@
-{% extends framework.html %}
+{% extends "framework.html" %}
 
 {% block body %}
 <h1>Oops, there's something wrong.</h1>
-    <div>{{ERROR_MESSAGE}}</div>
+<div>{{ERROR_MESSAGE}}</div>
+<a href="{{BACK_URL}}">Go Back</div>
 {% endblock %}

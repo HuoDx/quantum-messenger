@@ -33,6 +33,13 @@ class Question:
     # But I'm hurry to finish and meet my girlfriend online so it's fine ;)
     convert_timestamp = lambda x: datetime.datetime.strftime(datetime.datetime.fromtimestamp(x), '%b %d, %Y %H:%M:%S')
     
+    def get_answered_time(self, unanswered_prompt='该问题没有被回答') -> str:
+        return Question.convert_timestamp(self.answer_time) if self.answer_time is not None else unanswered_prompt
+    
+    def get_ask_time(self, unasked_prompt='该问题没有被提出') -> str:
+        print('Encountered an unasked question; this is a bug.')
+        return Question.convert_timestamp(self.ask_time) if self.answer_time is not None else unasked_prompt
+    
     def __str__(self):
         ans = ''
         ans+=('Question:')
@@ -60,20 +67,24 @@ def add_question(question_object: Question):
     
     questions.update({question_object.uid: question_object})
     
-    if question_object.asker is None or question_object.answerer is None:
+    if question_object.answerer is None:
         raise Exception('Incomplete question.')
     
     if question_object.asker in asker_questions:
         asker_questions.get(question_object.asker).append(question_object.uid)
     else:
-        asker_questions.update({question_object.asker: question_object.uid})
+        asker_questions.update({question_object.asker: [question_object.uid]})
     
     if question_object.answerer in answerer_questions:
         answerer_questions.get(question_object.answerer).append(question_object.uid)
     else:
-        answerer_questions.update({question_object.answerer: question_object.uid})
+        answerer_questions.update({question_object.answerer: [question_object.uid]})
         
     return True
+
+def get_question(question_uid) -> Question:
+    global questions
+    return questions.get(question_uid)
 
 def get_questions_by_asker(asker_uid) -> List[Question]:
     global questions, asker_questions
@@ -102,7 +113,7 @@ def answer_question(question_uid, answer, answerer_uid):
         return False, err_msg
     question.answer = answer
     question.answer_time = time.time()
-    return True
+    return True,
 
 # test
 # import uuid
@@ -117,5 +128,20 @@ def answer_question(question_uid, answer, answerer_uid):
 # answer_question(q.uid, '你好。', ansr)
 # print(q)
 
+temporary_questions = {} # token -> list<question uid>
 
-            
+def register_temporary(token, question_uid):
+    global temporary_questions
+    if token in temporary_questions:
+        temporary_questions.get(token).append(question_uid)
+    else:
+        temporary_questions.update({token: [question_uid]})
+    return True
+
+def remove_temporary(token, user_uid):
+    global temporary_questions, questions
+    count = 0
+    for question_uid in temporary_questions.get(token,[]):
+        questions.get(question_uid).asker = user_uid
+        count += 1
+    return True, '%s questions updated.'%count

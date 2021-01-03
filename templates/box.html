@@ -1,22 +1,83 @@
-{% extends framework.html %}
+{% extends "framework.html" %}
+
+{% block css %}
+.head-container {
+        display: flex;
+    flex-direction: column;
+    margin: 24px;
+    justify-content: center;
+    text-align: center;
+}
+.avatar {
+    border-radius:50%;
+    align-self: center;
+}
+.share-mask {
+    display: none;
+}
+#more {
+    display: none;
+}
+
+#more:checked ~ .share-mask {
+    display: block;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100vw;
+    height: 100%;
+    background-color: rgba(0,0,0,0.75);
+    z-index: 100;
+    color: white;
+    padding: 16px;
+    text-align: end;
+    font-size: 20px;
+}
+.flex-container {
+    display: flex;
+    flex-direction: column;
+}
+
+
+{% endblock %}
 
 {% block body %}
 
-<div>
-    <img src="{{OWNER.avatar_url}}" width="128px" height="128px" style="border-radius:50%;" />
+<div class="flex-container">
+    <input type="checkbox"  id="more"/>
+    <div class="share-mask">
+        <div>点击右上角分享到朋友圈</div>
+    </div>
+    <label for="more" class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" id="more-button" style="align-self: flex-end;">获取更多提问</label>
+</div>
+
+<div class="head-container">
+    <img src="{{OWNER.avatar_url}}" width="86px" height="86px" class="avatar" />
     <h4>欢迎向我匿名提问</h4>
+
+    <form action="/box/{{OWNER.uid}}" method="POST">
+        <div class="mdui-textfield mdui-textfield-floating-label">
+            <label class="mdui-textfield-label">匿名问一个问题</label>
+            <textarea name="question" class="mdui-textfield-input"></textarea>
+        </div>
+        <button class="mdui-btn mdui-btn-raised">提问</button>
+    </form>
 </div>
 
 <div class="mdui-tab" mdui-tab>
-  <a href="#answered-tab" class="mdui-ripple mdui-tab-active">回答过的问题</a>
-  <a href="#unanswered-tab" class="mdui-ripple">未回答的问题</a>
+  <a href="#answered-tab" class="mdui-ripple mdui-tab-active">已回答</a>
+  {% if not IS_OWNER %}
+      <a href="#unanswered-tab" class="mdui-ripple" disabled>未回答</a>
+  {% else %}
+      <a href="#unanswered-tab" class="mdui-ripple">未回答</a>
+  {% endif %}
 </div>
 
 <div id="answered-tab" class="mdui-p-a-2">
-    {% for QUESTION in QUESTIONS %}
+    {% for QUESTION in ANSWERED_QUESTIONS %}
     <div class="mdui-card">
         <div class="mdui-card-media">
-            <img src=""/>
+            <img src="/static/img/background.jpg"/>
             <div class="mdui-card-media-covered mdui-card-media-covered-top">
             <div class="mdui-card-primary">
                 <div class="mdui-card-primary-title">提问：</div>
@@ -30,6 +91,7 @@
                     <div class="mdui-panel-item-header">查看回答</div>
                     <div class="mdui-panel-item-body">
                         <p>{{QUESTION.answer}}</p>
+                        <p style="align-self:flex-end;">该问题于 {{QUESTION.get_answered_time()}} 被回答</p>
                     </div>
                 </div>
             </div>
@@ -38,10 +100,42 @@
     {% endfor %}
 </div>
 
-
+{% if IS_OWNER %}
 <div id="unanswered-tab" class="mdui-p-a-2">
+    {% for QUESTION in UNANSWERED_QUESTIONS %}
+    <div class="mdui-card">
+        <div class="mdui-card-media">
+            <img src="/static/img/background-unans.jpg"/>
+            <div class="mdui-card-media-covered mdui-card-media-covered-top">
+            <div class="mdui-card-primary">
+                <div class="mdui-card-primary-title">提问：</div>
+                <div class="mdui-card-primary-subtitle">{{QUESTION.question}}</div>
+            </div>
+            </div>
+        </div>
+        <div class="mdui-card-actions">
+            <div class="mdui-panel" mdui-panel>
+                <div class="mdui-panel-item">
+                    <div class="mdui-panel-item-header">回答这个问题</div>
+                    <div class="mdui-panel-item-body">
 
+            <form action="/answer/{{QUESTION.uid}}" method="POST">
+                <div class="mdui-textfield mdui-textfield-floating-label">
+                    <label class="mdui-textfield-label">写下你的回答</label>
+                    <textarea name="answer" class="mdui-textfield-input"></textarea>
+                </div>
+                <button class="mdui-btn mdui-btn-raised">提交</button>
+            </form>
+
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    {% endfor %}
 </div>
+{% endif %}
 
 
 {% endblock %}

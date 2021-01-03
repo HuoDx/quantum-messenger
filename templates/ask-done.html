@@ -1,0 +1,22 @@
+{% extends "framework.html" %}
+
+{% block body %}
+
+<h3>您的问题已发出！</h3>
+{% if IS_TEMP %}
+    
+    <div>
+        <div>长按下方二维码，关注公众号即可在提问被回答后接收通知</div>
+        <img src="{{QR_CODE_URL}}" width="128px" height="128px" />
+        <div>PS：当然，您也可以选择关掉这个页面，时不时来提问箱看看 ;D </div>
+    </div>
+
+{% else %}
+    <div>
+        我们会在问题被回答的时候通知你
+        <div>PS：当然，您也可以时不时来提问箱看看 ;D </div>
+    </div>
+{% endif %}
+
+
+{% endblock %}
