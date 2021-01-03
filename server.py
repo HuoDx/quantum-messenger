@@ -98,6 +98,13 @@ def box(user_uid):
                                                 IS_TEMP = not logged_in,
                                                 BACK_URL = '/box/%s'%user_uid
         ))
+        result = wxpush.push_notification(Notification(
+            '<h3>您收到新的提问，点击下方链接查看</h3><a href="%s">查看我的提问箱</a>'%(config.base+'/box/%s'%user_uid),
+            Notification.HTML,
+            '您有新的提问！'
+        ), [user_uid])
+        if not result:
+            print('Question answered, but was not pushed.')
         if not logged_in:
             response.set_cookie('token', token)
             question = Question.ask(q, None, user_uid)
