@@ -4,6 +4,7 @@ from uuid import uuid4
 from utils import wxpush
 import user
 from question import Question, add_question, get_questions_by_answerer, get_questions_by_asker, get_question, register_temporary, answer_question,remove_temporary
+import re
 
 from notifications.notification import Notification
 app = Flask(__name__)
@@ -76,8 +77,8 @@ def box(user_uid):
     else:
         # ask a question to the box
         q = request.form.get('question')
-        if q is None or q == '':
-            return render_template('oops.html', ERROR_MESSAGE='Invalid Question - question must not be empty.')
+        if q is None or re.sub(r'[\s]', '', q) == '':
+            return render_template('oops.html', ERROR_MESSAGE='Invalid Question - your question must not be empty.')
         
         logged_in = False
         qr_code_url = ''

@@ -1,7 +1,12 @@
 {% extends "framework.html" %}
 
 {% block body %}
-<h1>Oops, there's something wrong.</h1>
-<div>{{ERROR_MESSAGE}}</div>
-<a href="{{BACK_URL}}">Go Back</div>
+<div class="mdui-container">
+  <h1>Oops, there's something wrong.</h1>
+  <h2>{{ERROR_MESSAGE}}</h2>
+  <div>
+  <p>This is probably not an issue with Quantum Messenger, but a mistake that you've made.</p>
+  <a href="{{BACK_URL}}">Go Back</div>
+  </div>
+</div>
 {% endblock %}
