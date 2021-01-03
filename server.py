@@ -41,6 +41,10 @@ def callback():
     ) 
     return 'ok.'
 
+@app.route('/')
+def index():
+    return redirect('/login')
+
 @app.route('/box/<user_uid>', methods=['GET', 'POST'])
 def box(user_uid):
     user_fetch = user.get_user_info(request.cookies.get('token'))
